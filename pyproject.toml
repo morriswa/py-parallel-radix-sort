@@ -1,0 +1,8 @@
+[project]
+name = "parallel_radix_sort_morriswa"
+version = "0.0.1"
+authors = [
+  { name="William A. Morris", email="william@morriswa.org" },
+]
+description = "A parallel radix sort alg"
+requires-python = ">=3.12"

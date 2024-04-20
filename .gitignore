@@ -1,0 +1,13 @@
+
+# venv
+bin/
+include/
+lib/
+pyvenv.cfg
+
+# python
+__pycache__/
+
+# ide
+.idea/
+.vscode/
