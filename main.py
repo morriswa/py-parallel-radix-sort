@@ -11,6 +11,16 @@ from radix_sort import radix_sort, parallel_radix_sort
     :author William A. Morris
 """
 
+# test params
+TRIALS = 5
+TEST_ARRAY_SIZES = [100_000_000]
+TEST_PROCESSES = [4, 2, 1]
+TEST_RANGES = [999_999]
+TEST_CASES = [(size, proc, range_w)
+              for size in TEST_ARRAY_SIZES
+              for proc in TEST_PROCESSES
+              for range_w in TEST_RANGES]
+
 
 def generate_list(size: int, min_num: int = 1, max_num: int = 100_000) -> list[int]:
     """ Generate a list with random numbers between (inclusive) `min_num` and `max_num`"""
@@ -41,27 +51,17 @@ def main():
         # write header
         recorder.writerow(['Array Size', 'Max Num', 'Processes', 'TT Sort ms'])
 
-        # test setup
-        trials = 10
-        sizes = [100_000, 1_000_000, 10_000_000, 100_000_000]
-        processes = [1, 2, 4, 8]
-        ranges = [9, 99, 999, 9_999, 999_999, 9_999_999]
-        test_cases = [(size, proc, range_w)
-                      for size in sizes
-                      for proc in processes
-                      for range_w in ranges]
-
         # run test cases
-        for test in test_cases:
+        for test in TEST_CASES:
             size = test[0]
             proc = test[1]
             range_w = test[2]
 
             # log current test case
-            print(f'===== Test Case S: {size} P: {proc} R: {range_w} =====')
+            print(f'===== Size: {size} Processes: {proc} Range: {range_w} =====')
 
             # run desired number of trials
-            for _ in range(trials):
+            for trial in range(TRIALS):
                 # get a list
                 random_list = generate_list(size, 1, range_w)
 
@@ -77,6 +77,7 @@ def main():
                 # get time (seconds)
                 stopwatch = end - start
 
+                print(f'Trial {trial + 1}: {stopwatch}')
                 # record data
                 recorder.writerow([size, range_w, proc, round(stopwatch * 1000)])
 
