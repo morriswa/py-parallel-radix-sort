@@ -1,6 +1,5 @@
 
-from multiprocessing import Process, Queue, SimpleQueue
-from random import randint
+from multiprocessing import Process, SimpleQueue
 from time import sleep
 from typing import Optional
 
@@ -8,32 +7,6 @@ from typing import Optional
     Radix Sort
     William A. Morris
 """
-
-
-def generate_list(size: int, min_num: int = 1, max_num: int = 100_000) -> list[int]:
-    """ Generate a list with random numbers between (inclusive) `min_num` and `max_num`"""
-    new_list = [randint(min_num, max_num) for _ in range(size)]
-
-    return new_list
-
-
-def is_sorted(arr: list[int]) -> bool:
-    """ Check if `arr` is sorted """
-    # store first element
-    previous_element = arr[0]
-    # for every element in the array
-    for current_element in arr[1:]:
-        # compare to last element
-        if current_element < previous_element:
-            return False
-        # update previous
-        previous_element = current_element
-    return True
-
-
-def default_sort(unsorted: list[int]) -> list[int]:
-    """ wrapper for built-in sort """
-    return sorted(unsorted)
 
 
 def count_sort(
@@ -86,7 +59,7 @@ def radix_sort(unsorted: list[int]) -> list[int]:
     return output
 
 
-def radix_sort_process(unsorted: list[int], result: Queue) -> None:
+def radix_sort_process(unsorted: list[int], result: SimpleQueue) -> None:
     """ radix sort wrapped up for execution as process """
     sorted_arr = radix_sort(unsorted)
     # store result from sort in async queue
@@ -175,7 +148,7 @@ def parallel_radix_sort(unsorted: list[int], process_count: int = 4) -> list[int
         if completed_processes == process_count:
             break
 
-    # terminate processes
+    # terminate lingering processes
     for proc in processes:
         proc.terminate()
 
